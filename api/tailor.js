@@ -22,43 +22,47 @@ module.exports = async function handler(req, res) {
       catch (e) { body = {}; }
     }
 
-    const { userName, jobDesc, userSkills, targetIndustry, docType } = body || {};
+    const { userName, jobDesc, userSkills, targetIndustry, docType, webhookUrl } = body || {};
     const apiKey = process.env.GROQ_API_KEY;
 
     if (!apiKey) {
       return res.status(500).json({ error: "API Key is missing in Vercel Environment Variables." });
     }
 
-    if (!userName || !jobDesc || !userSkills) {
-      return res.status(400).json({ error: "Missing required fields: Name, Job Description, or Skills." });
+    if (!userName || !jobDesc || !userSkills || !docType) {
+      return res.status(400).json({ error: "Missing mandatory fields." });
     }
 
-    // Initialize SDK. 
-    // NOTE: If using OpenRouter to access the specific models in your screenshot, uncomment the baseURL line.
     const ai = new Groq({ 
       apiKey: apiKey,
-      // baseURL: "https://openrouter.ai/api/v1" 
+      // baseURL: "https://openrouter.ai/api/v1" // Uncomment if using OpenRouter
     });
 
+    // Determine requested output format
     let typeInstruction = "";
-    if (docType === "resume") typeInstruction = "Tailored resume bullet points optimized for ATS systems and recommended keywords.";
-    else if (docType === "cv") typeInstruction = "A comprehensive academic and professional CV structure with distinct sections.";
-    else if (docType === "cover_letter") typeInstruction = "A professional, persuasive, and ready-to-use cover letter.";
-    else if (docType === "interview") typeInstruction = "5 highly likely technical/behavioral interview questions with suggested answers.";
-    else typeInstruction = "Tailored professional materials.";
+    switch(docType) {
+        case "resume": typeInstruction = "Tailored resume bullet points optimized for ATS systems and recommended keywords."; break;
+        case "cv": typeInstruction = "A comprehensive academic and professional CV structure with distinct sections."; break;
+        case "cover_letter": typeInstruction = "A professional, persuasive, and ready-to-use cover letter."; break;
+        case "interview": typeInstruction = "5 highly likely technical/behavioral interview questions with suggested answers."; break;
+        case "ats_score": typeInstruction = "An ATS Match Score percentage, followed by a list of missing critical keywords and gap analysis."; break;
+        case "star_case": typeInstruction = "Reformat the user's skills and experience into 3 strict STAR method (Situation, Task, Action, Result) case studies."; break;
+        case "linkedin": typeInstruction = "An optimized LinkedIn profile headline, an engaging 'About' summary, and bullet points for the experience section."; break;
+        case "cold_email": typeInstruction = "A compelling cold outreach networking email directed at department heads or business owners to secure an interview or meeting."; break;
+        default: typeInstruction = "Tailored professional materials.";
+    }
 
     const messages = [
       {
         role: "system",
-        content: "You are an expert technical recruiter and career coach. Format your output strictly using Markdown. Use clear ## and ### headings, bullet points, and bold text for emphasis. Ensure the output is structured, highly readable, and professional. Do not output giant walls of plain text."
+        content: `You are an elite technical recruiter and career strategist. Format your output strictly using Markdown. Use clear ## and ### headings, bullet points, and bold text for emphasis. Apply industry-specific terminology appropriately. Ensure the output is highly readable and professional.`
       },
       {
         role: "user",
-        content: `Applicant Name: ${userName}\nTarget Industry: ${targetIndustry || "General"}\nJob Description / Role:\n${jobDesc}\n\nMy Skills & Experience:\n${userSkills}\n\nRequired Output: ${typeInstruction}`
+        content: `Applicant Name: ${userName}\nTarget Industry: ${targetIndustry || "General"}\nJob Description / Target Role:\n${jobDesc}\n\nMy Skills, Education & Experience:\n${userSkills}\n\nRequired Output: ${typeInstruction}`
       }
     ];
 
-    // Requested Cascading Fallback Array
     const fallbackModels = [
       "llama-3.3-70b-versatile",
       "qwen/qwen3-32b",
@@ -68,26 +72,38 @@ module.exports = async function handler(req, res) {
     let chatCompletion = null;
     let lastError = null;
 
-    // Loop through the models and break on the first successful response
     for (const model of fallbackModels) {
       try {
         chatCompletion = await ai.chat.completions.create({
           model: model,
           messages: messages
         });
-        break; // Exit the loop immediately if the request succeeds
+        break; 
       } catch (error) {
-        console.warn(`Model [${model}] failed. Initiating fallback...`, error.message);
+        console.warn(`Model [${model}] failed. Fallback initiated.`, error.message);
         lastError = error;
       }
     }
 
-    // If all models in the array fail, return the last caught error
     if (!chatCompletion) {
-      return res.status(500).json({ error: "All AI models failed to respond. Last error: " + (lastError?.message || "Unknown API error.") });
+      return res.status(500).json({ error: "All AI models failed. Last error: " + (lastError?.message || "Unknown error.") });
     }
 
     const resultText = chatCompletion.choices[0]?.message?.content || "No response generated.";
+
+    // Optional Webhook Execution (Fire and Forget)
+    if (webhookUrl && webhookUrl.startsWith('http')) {
+        try {
+            fetch(webhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ applicant: userName, type: docType, content: resultText, timestamp: new Date().toISOString() })
+            }).catch(err => console.error("Webhook trigger failed:", err));
+        } catch (e) {
+            console.error("Webhook processing error:", e);
+        }
+    }
+
     return res.status(200).json({ result: resultText });
 
   } catch (error) {
