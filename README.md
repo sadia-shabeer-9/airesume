@@ -79,15 +79,14 @@ Additionally, for Resume/CV generation, a programmatic prefix instruction is inj
 ### 1. Step 1: User Profile & Target Industry
 <img width="1920" height="1040" alt="image" src="https://github.com/user-attachments/assets/4532bb89-218f-4bc4-a9e3-0ecec631148c" />
 
-### 2. Step 2. Job Description or Project Idea *
+### 2. Step 2. Job Description or Project Idea 
 <img width="1920" height="1038" alt="image" src="https://github.com/user-attachments/assets/a394ca9f-ab37-4568-a789-13bf4cda9160" />
 
 ### 3. Step 3: Tool Selection & Webhook Configuration
 <img width="1920" height="1038" alt="image" src="https://github.com/user-attachments/assets/b8d7f628-9343-43db-bfc8-bd3b52d4276c" />
 
 ### 3. Generated Result & ATS Gap Analysis Side Panel
-![Result and ATS Score](./assets/screenshot3.png)
-*The generated Markdown document beautifully rendered alongside the extracted ATS Match Score.*
+<img width="1920" height="1039" alt="image" src="https://github.com/user-attachments/assets/38f38f10-e387-4d37-b36a-635112769de7" />
 
 ---
 
