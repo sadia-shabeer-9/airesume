@@ -77,12 +77,13 @@ Additionally, for Resume/CV generation, a programmatic prefix instruction is inj
 *(Note: Ensure your image files are located in your GitHub repository, such as in an `assets` folder, and replace the `./assets/` paths below with your actual file names).*
 
 ### 1. Step 1: User Profile & Target Industry
-![Profile Setup](./assets/screenshot1.png)
-*The clean, modern UI wizard collecting the user's basic information.*
+<img width="1920" height="1040" alt="image" src="https://github.com/user-attachments/assets/4532bb89-218f-4bc4-a9e3-0ecec631148c" />
 
-### 2. Step 3: Tool Selection & Webhook Configuration
-![Tool Selection](./assets/screenshot2.png)
-*Users can select from over 8 professional career modules and configure automation payloads.*
+### 2. Step 2. Job Description or Project Idea *
+<img width="1920" height="1038" alt="image" src="https://github.com/user-attachments/assets/a394ca9f-ab37-4568-a789-13bf4cda9160" />
+
+### 3. Step 3: Tool Selection & Webhook Configuration
+<img width="1920" height="1038" alt="image" src="https://github.com/user-attachments/assets/b8d7f628-9343-43db-bfc8-bd3b52d4276c" />
 
 ### 3. Generated Result & ATS Gap Analysis Side Panel
 ![Result and ATS Score](./assets/screenshot3.png)
