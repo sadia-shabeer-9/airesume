@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Dynamic Emoji Favicon (Replaces the Grey Globe) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     
     <title>DevForge AI | Career Suite</title>
     
-    <!-- CDNs -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
@@ -28,7 +26,6 @@
 
     <div class="max-w-4xl mx-auto px-4 py-12 w-full flex-grow">
         
-        <!-- Upgraded CS/Tech Header -->
         <header class="mb-10 text-center">
             <div class="inline-block mb-3 p-3 bg-indigo-50 rounded-2xl shadow-sm border border-indigo-100">
                 <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -43,7 +40,6 @@
 
         <main class="bg-white shadow-2xl shadow-slate-200/50 rounded-2xl p-6 md:p-10 border border-slate-100 relative overflow-hidden">
             
-            <!-- Progress Bar -->
             <div id="progressContainer" class="mb-8">
                 <div class="flex justify-between text-xs font-bold text-slate-400 mb-2 px-1">
                     <span id="labelStep1" class="text-indigo-600">1. Profile</span>
@@ -55,7 +51,6 @@
                 </div>
             </div>
 
-            <!-- Error Banner -->
             <div id="errorMsg" class="hidden text-red-600 text-sm font-semibold bg-red-50 p-3 rounded-lg border border-red-200 mb-6"></div>
 
             <!-- WIZARD STEP 1 -->
@@ -67,8 +62,8 @@
                         <input type="text" id="userName" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., John Doe" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-2">Target Industry <span class="text-red-500">*</span></label>
-                        <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Software Engineering, FinTech, Web Development" required>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Target Industry <span class="text-slate-400 font-normal">(Optional)</span></label>
+                        <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Software Engineering, Web Development">
                     </div>
                 </div>
                 <div class="flex justify-end pt-4">
@@ -80,12 +75,12 @@
             <div id="step2" class="step-hidden space-y-6">
                 <h2 class="text-xl font-bold text-slate-800 border-b pb-2">Experience & Targeting</h2>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Job Description or Role Title <span class="text-red-500">*</span></label>
-                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Seeking a Full-Stack Developer with React and Node.js experience..." required></textarea>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Job Description or Project Idea <span class="text-red-500">*</span></label>
+                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="Paste a job description or describe a freelance project you want to pitch..." required></textarea>
                 </div>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Current Skills, Education & Experience <span class="text-red-500">*</span></label>
-                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., CS Undergrad, built a full-stack web app, proficient in Python, JavaScript, and AWS..." required></textarea>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Current Skills & Experience <span class="text-slate-400 font-normal">(Leave blank if fresher)</span></label>
+                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Built a full-stack web app, proficient in Python... (If you are a fresher with no experience, you can leave this empty)"></textarea>
                 </div>
                 <div class="flex justify-between pt-4">
                     <button onclick="prevStep(1)" class="text-slate-500 hover:text-slate-800 font-bold py-3 px-4 transition-all">&larr; Back</button>
@@ -112,10 +107,12 @@
                             <option value="cold_email">Cold Outreach Networking Email</option>
                             <option value="interview">Technical Interview Prep Guide</option>
                         </optgroup>
+                        <optgroup label="Freelance & Business">
+                            <option value="freelance_pitch">Freelance Project Pitch / Proposal</option>
+                        </optgroup>
                     </select>
                 </div>
 
-                <!-- Automation / Webhook Integration -->
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                     <label class="block text-sm font-bold text-slate-700 mb-2">Automated Payload Webhook <span class="text-slate-400 font-normal">(Optional)</span></label>
                     <p class="text-xs text-slate-500 mb-3">Instantly push generated results to your external n8n workflows or Discord channels.</p>
@@ -162,7 +159,6 @@
         </main>
     </div>
 
-    <!-- Developer Footer -->
     <footer class="bg-white border-t border-slate-200 py-6 text-center mt-auto">
         <p class="text-slate-500 text-sm font-medium">
             Designed and Developed with precision by 
@@ -171,7 +167,6 @@
     </footer>
 
     <script>
-        // Form Fields
         const fName = document.getElementById('userName');
         const fInd = document.getElementById('targetIndustry');
         const fJob = document.getElementById('jobDesc');
@@ -186,15 +181,15 @@
             errorMsg.classList.add('block');
         }
 
-        // Wizard Navigation Logic
+        // Updated Validation for Wizard
         function nextStep(step) {
             errorMsg.classList.add('hidden');
             
-            if (step === 2 && (!fName.value.trim() || !fInd.value.trim())) {
-                showError("Please complete all fields in Step 1."); return;
+            if (step === 2 && !fName.value.trim()) {
+                showError("Please enter your Full Name."); return;
             }
-            if (step === 3 && (!fJob.value.trim() || !fSkills.value.trim())) {
-                showError("Please complete all fields in Step 2."); return;
+            if (step === 3 && !fJob.value.trim()) {
+                showError("Please enter a Job Description or Project Idea."); return;
             }
 
             document.getElementById('step1').classList.replace('step-active', 'step-hidden');
@@ -229,7 +224,6 @@
             fDoc.value = "";
         }
 
-        // Generate Execution
         document.getElementById('generateBtn').addEventListener('click', async () => {
             if (!fDoc.value) { showError("Please select an AI Tool Module."); return; }
 
@@ -275,7 +269,6 @@
             }
         });
 
-        // PDF Generation
         document.getElementById('pdfBtn').addEventListener('click', () => {
             const element = document.getElementById('pdfContainer');
             const opt = {
