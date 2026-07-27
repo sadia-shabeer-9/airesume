@@ -45,14 +45,14 @@ module.exports = async function handler(req, res) {
     let typeInstruction = "";
     switch(docType) {
         case "resume": typeInstruction = "Write a complete, professional, highly tailored resume formatted in Markdown. Do not use bracketed placeholders for experience, skills, or projects; instead, write professional, realistic bullet points based on the user's provided background and target job description."; break;
-        case "cv": typeInstruction = "Write a comprehensive, fully articulated academic and professional CV in Markdown, completely written out with professional descriptions tailored to the target role."; break;
-        case "cover_letter": typeInstruction = "Write a complete, persuasive cover letter ready to send."; break;
-        case "interview": typeInstruction = "Generate 5 likely technical interview questions with detailed, professional answers."; break;
-        case "star_case": typeInstruction = "Write 3 complete STAR method case studies based on the user's background."; break;
-        case "linkedin": typeInstruction = "Write an optimized LinkedIn headline, summary, and experience section."; break;
-        case "cold_email": typeInstruction = "Write a complete, compelling cold outreach email."; break;
-        case "freelance_pitch": typeInstruction = "Write a comprehensive freelance business proposal including scope, architecture, and timeline."; break;
-        default: typeInstruction = "Write tailored professional materials.";
+        case "cv": typeInstruction = "A comprehensive academic and professional CV structure with distinct sections."; break;
+        case "cover_letter": typeInstruction = "A professional, persuasive, and ready-to-use cover letter."; break;
+        case "interview": typeInstruction = "5 highly likely technical/behavioral interview questions with suggested answers."; break;
+        case "star_case": typeInstruction = "Reformat the skills and experience into strict STAR method (Situation, Task, Action, Result) case studies."; break;
+        case "linkedin": typeInstruction = "An optimized LinkedIn profile headline, an engaging 'About' summary, and bullet points for the experience section."; break;
+        case "cold_email": typeInstruction = "A compelling cold outreach networking email directed at department heads or business owners to secure an interview or meeting."; break;
+        case "freelance_pitch": typeInstruction = "A comprehensive freelance business proposal. Include a professional greeting, proposed scope of work, technical architecture recommendations, and project timeline estimations."; break;
+        default: typeInstruction = "Tailored professional materials.";
     }
 
     const messages = [
