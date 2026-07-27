@@ -5,38 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Career & Resume Tailorer</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
 
-    <div class="max-w-3xl mx-auto px-4 py-12 w-full">
+    <div class="max-w-4xl mx-auto px-4 py-12 w-full">
         <header class="mb-8 text-center">
             <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">AI Career & Resume Tailorer</h1>
             <p class="text-slate-600 mt-2">Optimize your professional profile for specific job descriptions.</p>
         </header>
 
         <main class="bg-white shadow-xl rounded-2xl p-6 md:p-8 border border-slate-100">
-            <div class="space-y-6">
-                <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Job Description or Role Title</label>
-                    <textarea id="jobDesc" rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="e.g., Seeking a registered nurse with clinical experience..."></textarea>
+            
+            <!-- Input Section -->
+            <div id="inputSection" class="space-y-6 block">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Full Name *</label>
+                        <input type="text" id="userName" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="John Doe" required>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-slate-700 mb-2">Target Industry</label>
+                        <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="e.g., Healthcare, Nursing">
+                    </div>
                 </div>
+
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Current Skills & Experience</label>
-                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="e.g., Nursing student, clinical rotations, patient care..."></textarea>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Document Type</label>
+                    <select id="docType" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white">
+                        <option value="resume">Resume Bullet Points & Keywords</option>
+                        <option value="cover_letter">Professional Cover Letter</option>
+                        <option value="cv">Full Academic / Professional CV</option>
+                        <option value="interview">Interview Questions & Preparation</option>
+                    </select>
                 </div>
+
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Target Industry</label>
-                    <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="e.g., Healthcare, Nursing">
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Job Description or Role Title *</label>
+                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="Paste the exact job description here..." required></textarea>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-slate-700 mb-2">Current Skills & Experience *</label>
+                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="List your projects, clinical rotations, past work experience..." required></textarea>
+                </div>
+
                 <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
                     Generate Tailored Materials
                 </button>
             </div>
 
-            <!-- Result Box -->
-            <div id="resultContainer" class="mt-8 hidden">
-                <h2 class="text-lg font-bold text-slate-900 mb-3">Generated Results</h2>
-                <div id="result" class="bg-slate-50 border border-slate-200 rounded-lg p-5 text-sm whitespace-pre-wrap leading-relaxed text-slate-700"></div>
+            <!-- Result Section -->
+            <div id="resultSection" class="hidden">
+                <div class="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
+                    <h2 class="text-xl font-bold text-slate-900">Generated Document</h2>
+                    <button id="backBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-2 px-4 rounded-lg transition duration-200 text-sm">
+                        &larr; Create Another
+                    </button>
+                </div>
+                
+                <!-- The 'prose' class automatically styles the markdown headings, lists, and bold text -->
+                <div id="result" class="prose prose-slate prose-indigo max-w-none text-sm leading-relaxed text-slate-700"></div>
             </div>
         </main>
     </div>
@@ -46,47 +76,64 @@
     </footer>
 
     <script>
-        document.getElementById('generateBtn').addEventListener('click', async () => {
+        const generateBtn = document.getElementById('generateBtn');
+        const backBtn = document.getElementById('backBtn');
+        const inputSection = document.getElementById('inputSection');
+        const resultSection = document.getElementById('resultSection');
+        const resultDiv = document.getElementById('result');
+
+        generateBtn.addEventListener('click', async () => {
+            const userName = document.getElementById('userName').value.trim();
             const jobDesc = document.getElementById('jobDesc').value.trim();
             const userSkills = document.getElementById('userSkills').value.trim();
             const targetIndustry = document.getElementById('targetIndustry').value.trim();
-            const btn = document.getElementById('generateBtn');
-            const resultContainer = document.getElementById('resultContainer');
-            const resultDiv = document.getElementById('result');
+            const docType = document.getElementById('docType').value;
 
-            if (!jobDesc || !userSkills) {
-                alert("Please fill in both the job description and your skills.");
+            if (!userName || !jobDesc || !userSkills) {
+                alert("Please fill in your Name, the Job Description, and your Skills.");
                 return;
             }
 
-            btn.disabled = true;
-            btn.innerText = "Analyzing and generating...";
-            resultContainer.classList.remove('hidden');
-            resultDiv.innerText = "Processing request with AI engine. Please wait...";
+            generateBtn.disabled = true;
+            generateBtn.innerText = "Analyzing and generating. Please wait...";
 
             try {
                 const response = await fetch('/api/tailor', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ jobDesc, userSkills, targetIndustry })
+                    body: JSON.stringify({ userName, jobDesc, userSkills, targetIndustry, docType })
                 });
 
                 const data = await response.json();
                 
                 if (response.ok) {
-                    resultDiv.innerText = data.result;
+                    // Hide input, show result
+                    inputSection.classList.add('hidden');
+                    inputSection.classList.remove('block');
+                    resultSection.classList.remove('hidden');
+                    resultSection.classList.add('block');
+                    
+                    // Parse Markdown to HTML
+                    resultDiv.innerHTML = marked.parse(data.result);
                 } else {
-                    resultDiv.innerText = "Backend Error: " + (data.error || "Failed to generate.");
                     alert("Backend Error: " + (data.error || "Unknown server error."));
                 }
             } catch (error) {
-                resultDiv.innerText = "Network Error: Could not connect to the backend server.";
                 alert("Network Error: Make sure Vercel is fully deployed and the API route exists.");
                 console.error(error);
             } finally {
-                btn.disabled = false;
-                btn.innerText = "Generate Tailored Materials";
+                generateBtn.disabled = false;
+                generateBtn.innerText = "Generate Tailored Materials";
             }
+        });
+
+        // Reset UI to start over
+        backBtn.addEventListener('click', () => {
+            resultSection.classList.add('hidden');
+            resultSection.classList.remove('block');
+            inputSection.classList.remove('hidden');
+            inputSection.classList.add('block');
+            resultDiv.innerHTML = "";
         });
     </script>
 </body>
