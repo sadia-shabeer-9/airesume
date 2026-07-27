@@ -4,98 +4,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Career & Resume Tailorer</title>
+    <!-- Standard Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Typography for rendering Markdown beautifully -->
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <!-- Marked.js for parsing Markdown to HTML -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* Custom scrollbar for textareas */
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        textarea::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    </style>
 </head>
-<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between">
+<body class="bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800 min-h-screen flex flex-col justify-between font-sans">
 
-    <div class="max-w-4xl mx-auto px-4 py-12 w-full">
-        <header class="mb-8 text-center">
-            <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">AI Career & Resume Tailorer</h1>
-            <p class="text-slate-600 mt-2">Optimize your professional profile for specific job descriptions.</p>
+    <div class="max-w-4xl mx-auto px-4 py-12 w-full flex-grow">
+        <!-- Header -->
+        <header class="mb-10 text-center">
+            <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 tracking-tight mb-3">
+                AI Career & Resume Tailorer
+            </h1>
+            <p class="text-slate-600 text-lg">Generate highly optimized, professional career documents instantly.</p>
         </header>
 
-        <main class="bg-white shadow-xl rounded-2xl p-6 md:p-8 border border-slate-100">
+        <!-- Main Interface Card -->
+        <main class="bg-white shadow-2xl shadow-slate-200/50 rounded-2xl p-6 md:p-10 border border-slate-100 relative overflow-hidden">
             
-            <!-- Input Section -->
-            <div id="inputSection" class="space-y-6 block">
+            <!-- Input Form Section -->
+            <div id="inputSection" class="space-y-7 block">
+                <div class="bg-indigo-50 border-l-4 border-indigo-600 p-4 rounded-r-lg mb-6">
+                    <p class="text-sm text-indigo-900 font-medium">All fields are mandatory. Please provide detailed information for the best results.</p>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Full Name *</label>
-                        <input type="text" id="userName" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="John Doe" required>
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Full Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="userName" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., John Doe" required>
                     </div>
                     <div>
-                        <label class="block text-sm font-semibold text-slate-700 mb-2">Target Industry</label>
-                        <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="e.g., Healthcare, Nursing">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Target Industry <span class="text-red-500">*</span></label>
+                        <input type="text" id="targetIndustry" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Healthcare, Software, Finance" required>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Document Type</label>
-                    <select id="docType" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm bg-white">
-                        <option value="resume">Resume Bullet Points & Keywords</option>
-                        <option value="cover_letter">Professional Cover Letter</option>
-                        <option value="cv">Full Academic / Professional CV</option>
-                        <option value="interview">Interview Questions & Preparation</option>
-                    </select>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Required Document Type <span class="text-red-500">*</span></label>
+                    <div class="relative">
+                        <select id="docType" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white appearance-none font-medium text-slate-700" required>
+                            <option value="" disabled selected>Select an option...</option>
+                            <option value="resume">Targeted Resume Bullet Points & Keywords</option>
+                            <option value="cv">Comprehensive Academic / Professional CV</option>
+                            <option value="cover_letter">Persuasive Cover Letter</option>
+                            <option value="interview">Interview Questions & Preparation Guide</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+                            <svg class="h-4 w-4 fill-current" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+                        </div>
+                    </div>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Job Description or Role Title *</label>
-                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="Paste the exact job description here..." required></textarea>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Job Description or Role Title <span class="text-red-500">*</span></label>
+                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white resize-y" placeholder="Paste the exact job description or role requirements here..." required></textarea>
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-slate-700 mb-2">Current Skills & Experience *</label>
-                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-lg border border-slate-300 focus:ring-2 focus:ring-indigo-500 outline-none text-sm" placeholder="List your projects, clinical rotations, past work experience..." required></textarea>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Current Skills, Education & Experience <span class="text-red-500">*</span></label>
+                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white resize-y" placeholder="List your degrees, projects, past work experience, technical skills, etc..." required></textarea>
                 </div>
 
-                <button id="generateBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 cursor-pointer">
-                    Generate Tailored Materials
+                <!-- Error Message Container -->
+                <div id="errorMsg" class="hidden text-red-600 text-sm font-semibold bg-red-50 p-3 rounded-lg border border-red-200"></div>
+
+                <button id="generateBtn" class="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 shadow-lg hover:shadow-indigo-500/30 flex items-center justify-center space-x-2">
+                    <span id="btnText">Generate Professional Document</span>
+                    <svg id="btnSpinner" class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
                 </button>
             </div>
 
             <!-- Result Section -->
             <div id="resultSection" class="hidden">
-                <div class="flex justify-between items-center mb-6 border-b border-slate-200 pb-4">
-                    <h2 class="text-xl font-bold text-slate-900">Generated Document</h2>
-                    <button id="backBtn" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-semibold py-2 px-4 rounded-lg transition duration-200 text-sm">
-                        &larr; Create Another
-                    </button>
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-slate-200 pb-4 gap-4">
+                    <h2 class="text-2xl font-black text-slate-900">Your Tailored Document</h2>
+                    <div class="flex space-x-3">
+                        <button id="printBtn" class="bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold py-2 px-4 rounded-lg transition-colors text-sm flex items-center border border-indigo-200">
+                            Print / Save PDF
+                        </button>
+                        <button id="backBtn" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm flex items-center">
+                            &larr; Create Another
+                        </button>
+                    </div>
                 </div>
                 
-                <!-- The 'prose' class automatically styles the markdown headings, lists, and bold text -->
-                <div id="result" class="prose prose-slate prose-indigo max-w-none text-sm leading-relaxed text-slate-700"></div>
+                <!-- Highly styled Markdown container -->
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-6 md:p-8 shadow-inner overflow-x-auto">
+                    <div id="result" class="prose prose-slate prose-indigo max-w-none 
+                        prose-headings:font-black prose-headings:text-slate-900 prose-headings:tracking-tight 
+                        prose-h2:text-2xl prose-h2:border-b prose-h2:pb-2 prose-h2:mb-4
+                        prose-h3:text-xl prose-h3:mt-6 prose-h3:mb-3
+                        prose-p:text-slate-700 prose-p:leading-relaxed prose-p:mb-4
+                        prose-li:text-slate-700 prose-li:my-1
+                        prose-strong:text-slate-900 prose-strong:font-bold
+                        prose-ul:list-disc prose-ul:pl-5
+                        prose-blockquote:border-l-4 prose-blockquote:border-indigo-500 prose-blockquote:bg-indigo-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:not-italic prose-blockquote:rounded-r-lg">
+                    </div>
+                </div>
             </div>
         </main>
     </div>
 
-    <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-200 bg-white">
-        Designed and Developed by <span class="font-semibold text-slate-700">Sadia Shabeer</span>
+    <!-- Developer Footer -->
+    <footer class="bg-white border-t border-slate-200 py-6 text-center">
+        <p class="text-slate-500 text-sm font-medium">
+            Designed and Developed with precision by 
+            <span class="text-indigo-600 font-black tracking-wide text-base">Sadia Shabeer</span>
+        </p>
     </footer>
 
     <script>
         const generateBtn = document.getElementById('generateBtn');
+        const btnText = document.getElementById('btnText');
+        const btnSpinner = document.getElementById('btnSpinner');
         const backBtn = document.getElementById('backBtn');
+        const printBtn = document.getElementById('printBtn');
         const inputSection = document.getElementById('inputSection');
         const resultSection = document.getElementById('resultSection');
         const resultDiv = document.getElementById('result');
+        const errorMsg = document.getElementById('errorMsg');
+
+        // Fields
+        const fName = document.getElementById('userName');
+        const fIndustry = document.getElementById('targetIndustry');
+        const fDocType = document.getElementById('docType');
+        const fJob = document.getElementById('jobDesc');
+        const fSkills = document.getElementById('userSkills');
+
+        function showError(msg) {
+            errorMsg.innerText = msg;
+            errorMsg.classList.remove('hidden');
+            errorMsg.classList.add('block');
+        }
+
+        function hideError() {
+            errorMsg.classList.add('hidden');
+            errorMsg.classList.remove('block');
+        }
 
         generateBtn.addEventListener('click', async () => {
-            const userName = document.getElementById('userName').value.trim();
-            const jobDesc = document.getElementById('jobDesc').value.trim();
-            const userSkills = document.getElementById('userSkills').value.trim();
-            const targetIndustry = document.getElementById('targetIndustry').value.trim();
-            const docType = document.getElementById('docType').value;
+            hideError();
 
-            if (!userName || !jobDesc || !userSkills) {
-                alert("Please fill in your Name, the Job Description, and your Skills.");
+            const userName = fName.value.trim();
+            const targetIndustry = fIndustry.value.trim();
+            const docType = fDocType.value;
+            const jobDesc = fJob.value.trim();
+            const userSkills = fSkills.value.trim();
+
+            // Strict Validation
+            if (!userName || !targetIndustry || !docType || !jobDesc || !userSkills) {
+                showError("Validation Failed: Please fill out all mandatory fields before generating.");
                 return;
             }
 
+            // UI Loading State
             generateBtn.disabled = true;
-            generateBtn.innerText = "Analyzing and generating. Please wait...";
+            generateBtn.classList.add('opacity-80', 'cursor-not-allowed');
+            btnText.innerText = "Processing AI Analysis...";
+            btnSpinner.classList.remove('hidden');
 
             try {
                 const response = await fetch('/api/tailor', {
@@ -107,33 +186,41 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    // Hide input, show result
                     inputSection.classList.add('hidden');
                     inputSection.classList.remove('block');
                     resultSection.classList.remove('hidden');
                     resultSection.classList.add('block');
                     
-                    // Parse Markdown to HTML
+                    // Parse Markdown with Marked.js
                     resultDiv.innerHTML = marked.parse(data.result);
                 } else {
-                    alert("Backend Error: " + (data.error || "Unknown server error."));
+                    showError("Server Error: " + (data.error || "Unknown error occurred."));
                 }
             } catch (error) {
-                alert("Network Error: Make sure Vercel is fully deployed and the API route exists.");
+                showError("Network Error: Cannot connect to the API. Ensure the Vercel backend is deployed.");
                 console.error(error);
             } finally {
+                // Restore Button State
                 generateBtn.disabled = false;
-                generateBtn.innerText = "Generate Tailored Materials";
+                generateBtn.classList.remove('opacity-80', 'cursor-not-allowed');
+                btnText.innerText = "Generate Professional Document";
+                btnSpinner.classList.add('hidden');
             }
         });
 
-        // Reset UI to start over
+        // Reset Interface
         backBtn.addEventListener('click', () => {
             resultSection.classList.add('hidden');
             resultSection.classList.remove('block');
             inputSection.classList.remove('hidden');
             inputSection.classList.add('block');
             resultDiv.innerHTML = "";
+            hideError();
+        });
+
+        // Native Print Functionality
+        printBtn.addEventListener('click', () => {
+            window.print();
         });
     </script>
 </body>
