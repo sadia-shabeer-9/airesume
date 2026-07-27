@@ -1,7 +1,6 @@
 const Groq = require("groq-sdk");
 
 module.exports = async function handler(req, res) {
-  // CORS Headers
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -29,16 +28,18 @@ module.exports = async function handler(req, res) {
       return res.status(500).json({ error: "API Key is missing in Vercel Environment Variables." });
     }
 
-    if (!userName || !jobDesc || !userSkills || !docType) {
-      return res.status(400).json({ error: "Missing mandatory fields." });
+    // Relaxed Validation: Only Name, Job/Project Desc, and Doc Type are mandatory
+    if (!userName || !jobDesc || !docType) {
+      return res.status(400).json({ error: "Missing mandatory fields: Name or Job/Project Description." });
     }
 
-    const ai = new Groq({ 
-      apiKey: apiKey,
-      // baseURL: "https://openrouter.ai/api/v1" // Uncomment if using OpenRouter
-    });
+    // Handle Freshers/Empty Fields
+    const safeIndustry = targetIndustry ? targetIndustry : "General Technology / Software";
+    const safeSkills = userSkills ? userSkills : "Entry-level / Fresher. Highly motivated to learn and execute with precision. Focus on foundational concepts and strong work ethic.";
 
-    // Determine requested output format
+    const ai = new Groq({ apiKey: apiKey });
+
+    // Determine requested output format including the new Freelance Pitch
     let typeInstruction = "";
     switch(docType) {
         case "resume": typeInstruction = "Tailored resume bullet points optimized for ATS systems and recommended keywords."; break;
@@ -46,20 +47,21 @@ module.exports = async function handler(req, res) {
         case "cover_letter": typeInstruction = "A professional, persuasive, and ready-to-use cover letter."; break;
         case "interview": typeInstruction = "5 highly likely technical/behavioral interview questions with suggested answers."; break;
         case "ats_score": typeInstruction = "An ATS Match Score percentage, followed by a list of missing critical keywords and gap analysis."; break;
-        case "star_case": typeInstruction = "Reformat the user's skills and experience into 3 strict STAR method (Situation, Task, Action, Result) case studies."; break;
+        case "star_case": typeInstruction = "Reformat the skills and experience into strict STAR method (Situation, Task, Action, Result) case studies."; break;
         case "linkedin": typeInstruction = "An optimized LinkedIn profile headline, an engaging 'About' summary, and bullet points for the experience section."; break;
         case "cold_email": typeInstruction = "A compelling cold outreach networking email directed at department heads or business owners to secure an interview or meeting."; break;
+        case "freelance_pitch": typeInstruction = "A comprehensive freelance business proposal. Include a professional greeting, proposed scope of work, technical architecture recommendations, project timeline estimations, and a closing call to action."; break;
         default: typeInstruction = "Tailored professional materials.";
     }
 
     const messages = [
       {
         role: "system",
-        content: `You are an elite technical recruiter and career strategist. Format your output strictly using Markdown. Use clear ## and ### headings, bullet points, and bold text for emphasis. Apply industry-specific terminology appropriately. Ensure the output is highly readable and professional.`
+        content: `You are an elite technical recruiter, business strategist, and career coach. Format your output strictly using Markdown. Use clear ## and ### headings, bullet points, and bold text for emphasis. Apply industry-specific terminology appropriately. If the user indicates they are a fresher or entry-level, highlight their ambition, foundational knowledge, and problem-solving mindset.`
       },
       {
         role: "user",
-        content: `Applicant Name: ${userName}\nTarget Industry: ${targetIndustry || "General"}\nJob Description / Target Role:\n${jobDesc}\n\nMy Skills, Education & Experience:\n${userSkills}\n\nRequired Output: ${typeInstruction}`
+        content: `Name: ${userName}\nTarget Industry: ${safeIndustry}\nJob/Project Description:\n${jobDesc}\n\nMy Skills, Education & Experience:\n${safeSkills}\n\nRequired Output: ${typeInstruction}`
       }
     ];
 
@@ -91,7 +93,6 @@ module.exports = async function handler(req, res) {
 
     const resultText = chatCompletion.choices[0]?.message?.content || "No response generated.";
 
-    // Optional Webhook Execution (Fire and Forget)
     if (webhookUrl && webhookUrl.startsWith('http')) {
         try {
             fetch(webhookUrl, {
