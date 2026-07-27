@@ -44,7 +44,7 @@
                 <div class="flex justify-between text-xs font-bold text-slate-400 mb-2 px-1">
                     <span id="labelStep1" class="text-indigo-600">1. Profile</span>
                     <span id="labelStep2">2. Experience</span>
-                    <span id="labelStep3">3. Advanced Tools</span>
+                    <span id="labelStep3">3. Choose Tool</span>
                 </div>
                 <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
                     <div id="progressBar" class="h-full bg-indigo-600 transition-all duration-500 w-1/3"></div>
@@ -73,14 +73,14 @@
 
             <!-- WIZARD STEP 2 -->
             <div id="step2" class="step-hidden space-y-6">
-                <h2 class="text-xl font-bold text-slate-800 border-b pb-2">Experience & Targeting</h2>
+                <h2 class="text-xl font-bold text-slate-800 border-b pb-2">Experience & Job Details</h2>
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">Job Description or Project Idea <span class="text-red-500">*</span></label>
-                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="Paste a job description or describe a freelance project you want to pitch..." required></textarea>
+                    <textarea id="jobDesc" rows="3" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="Paste the job description here..." required></textarea>
                 </div>
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">Current Skills & Experience <span class="text-slate-400 font-normal">(Leave blank if fresher)</span></label>
-                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="e.g., Built a full-stack web app, proficient in Python... (If you are a fresher with no experience, you can leave this empty)"></textarea>
+                    <textarea id="userSkills" rows="4" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white" placeholder="List your skills, projects, or background..."></textarea>
                 </div>
                 <div class="flex justify-between pt-4">
                     <button onclick="prevStep(1)" class="text-slate-500 hover:text-slate-800 font-bold py-3 px-4 transition-all">&larr; Back</button>
@@ -90,31 +90,31 @@
 
             <!-- WIZARD STEP 3 -->
             <div id="step3" class="step-hidden space-y-6">
-                <h2 class="text-xl font-bold text-slate-800 border-b pb-2">Analysis & Execution</h2>
+                <h2 class="text-xl font-bold text-slate-800 border-b pb-2">Choose What to Create</h2>
                 <div>
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Select AI Tool Module <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Select Document Type <span class="text-red-500">*</span></label>
                     <select id="docType" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all text-sm bg-slate-50 focus:bg-white font-medium text-slate-800" required>
-                        <option value="" disabled selected>-- Select a Professional Tool --</option>
+                        <option value="" disabled selected>-- Select an option --</option>
                         <optgroup label="Core Documents">
-                            <option value="resume">Targeted Resume Bullet Points</option>
-                            <option value="cv">Comprehensive Academic / Professional CV</option>
-                            <option value="cover_letter">Persuasive Cover Letter Draft</option>
+                            <option value="resume">Resume Bullet Points</option>
+                            <option value="cv">Complete CV</option>
+                            <option value="cover_letter">Cover Letter</option>
                         </optgroup>
-                        <optgroup label="Advanced Analytics & Networking">
-                            <option value="star_case">STAR Method Case Study Builder</option>
-                            <option value="linkedin">LinkedIn Profile Optimizer</option>
-                            <option value="cold_email">Cold Outreach Networking Email</option>
-                            <option value="interview">Technical Interview Prep Guide</option>
+                        <optgroup label="Career & Networking">
+                            <option value="star_case">STAR Case Study</option>
+                            <option value="linkedin">LinkedIn Profile</option>
+                            <option value="cold_email">Cold Outreach Email</option>
+                            <option value="interview">Interview Prep Guide</option>
                         </optgroup>
-                        <optgroup label="Freelance & Business">
-                            <option value="freelance_pitch">Freelance Project Pitch / Proposal</option>
+                        <optgroup label="Freelance">
+                            <option value="freelance_pitch">Freelance Proposal / Pitch</option>
                         </optgroup>
                     </select>
                 </div>
 
                 <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                    <label class="block text-sm font-bold text-slate-700 mb-2">Automated Payload Webhook <span class="text-slate-400 font-normal">(Optional)</span></label>
-                    <input type="url" id="webhookUrl" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all text-sm bg-white" placeholder="e.g., https://your-n8n-instance.com/webhook/...">
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Webhook URL <span class="text-slate-400 font-normal">(Optional)</span></label>
+                    <input type="url" id="webhookUrl" class="w-full px-4 py-3 rounded-lg border border-slate-200 focus:ring-4 focus:ring-indigo-500/20 outline-none transition-all text-sm bg-white" placeholder="https://your-workflow-url.com/webhook/...">
                 </div>
 
                 <div class="flex justify-between pt-4">
@@ -157,22 +157,14 @@
                     </div>
                 </div>
 
-                <!-- SIDE PANEL: ATS SCORE & SPECIFIC JOB OPENINGS (Right Side) -->
+                <!-- SIDE PANEL: JOB OPENINGS (Right Side) -->
                 <div id="sidePanel" class="hidden lg:col-span-1 space-y-6">
-                    <!-- ATS Score Card -->
-                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-100 rounded-xl p-6 text-center shadow-md">
-                        <h3 class="text-sm font-bold text-indigo-900 uppercase tracking-widest mb-3">ATS Match Score</h3>
-                        <div id="atsScoreValue" class="text-5xl font-black text-indigo-600 drop-shadow-sm">--%</div>
-                        <p class="text-xs text-indigo-700 mt-4 font-medium leading-relaxed">Based on keyword and skill alignment with your provided job description.</p>
-                    </div>
-
-                    <!-- Specific Job Openings Card -->
                     <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-md">
                         <h3 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-2 flex items-center gap-2">
                             <svg class="w-4 h-4 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
                             Targeted Job Openings
                         </h3>
-                        <p class="text-xs text-slate-500 mb-4">Direct search links tailored specifically to your job description:</p>
+                        <p class="text-xs text-slate-500 mb-4">Direct search links based on your job description:</p>
                         <div id="jobSearchLinks" class="space-y-2">
                             <!-- Populated dynamically -->
                         </div>
@@ -208,7 +200,7 @@
         function nextStep(step) {
             errorMsg.classList.add('hidden');
             if (step === 2 && !fName.value.trim()) { showError("Please enter your Full Name."); return; }
-            if (step === 3 && !fJob.value.trim()) { showError("Please enter a Job Description or Project Idea."); return; }
+            if (step === 3 && !fJob.value.trim()) { showError("Please enter a Job Description."); return; }
 
             document.getElementById('step1').classList.replace('step-active', 'step-hidden');
             document.getElementById('step2').classList.replace('step-active', 'step-hidden');
@@ -243,7 +235,7 @@
         }
 
         document.getElementById('generateBtn').addEventListener('click', async () => {
-            if (!fDoc.value) { showError("Please select an AI Tool Module."); return; }
+            if (!fDoc.value) { showError("Please select a document type."); return; }
 
             const btnText = document.getElementById('btnText');
             const btnSpinner = document.getElementById('btnSpinner');
@@ -274,27 +266,16 @@
                     document.getElementById('resultSection').classList.replace('step-hidden', 'step-active');
                     
                     let rawResult = data.result;
-                    
-                    // Robust Regex to completely strip ATS_SCORE from the rendered document text
                     const atsRegex = /(?:^|\s*)ATS_SCORE:\s*(\d+%)/i;
-                    const match = rawResult.match(atsRegex);
+                    rawResult = rawResult.replace(atsRegex, '').trim();
 
-                    if (match) {
-                        document.getElementById('atsScoreValue').innerText = match[1];
-                        document.getElementById('atsScoreValue').parentElement.parentElement.classList.remove('hidden');
-                        rawResult = rawResult.replace(atsRegex, '').trim();
-                    } else {
-                        document.getElementById('atsScoreValue').parentElement.parentElement.classList.add('hidden');
-                    }
-
-                    // Generate specific job search queries based directly on the job description text
                     const jobText = fJob.value.trim();
                     const specificQuery = encodeURIComponent(jobText.length > 50 ? jobText.substring(0, 50) : jobText);
                     
                     document.getElementById('jobSearchLinks').innerHTML = `
-                        <a href="https://www.google.com/search?q=${specificQuery}+jobs&ibp=htl;jobs" target="_blank" class="block w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">🔍 Specific Google Jobs</a>
-                        <a href="https://www.linkedin.com/jobs/search/?keywords=${specificQuery}" target="_blank" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">💼 Specific LinkedIn Roles</a>
-                        <a href="https://www.indeed.com/jobs?q=${specificQuery}" target="_blank" class="block w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">🌐 Specific Indeed Listings</a>
+                        <a href="https://www.google.com/search?q=${specificQuery}+jobs&ibp=htl;jobs" target="_blank" class="block w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">🔍 Google Jobs</a>
+                        <a href="https://www.linkedin.com/jobs/search/?keywords=${specificQuery}" target="_blank" class="block w-full bg-blue-50 hover:bg-blue-100 text-blue-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">💼 LinkedIn Openings</a>
+                        <a href="https://www.indeed.com/jobs?q=${specificQuery}" target="_blank" class="block w-full bg-cyan-50 hover:bg-cyan-100 text-cyan-700 text-xs font-bold py-2.5 px-3 rounded-lg text-center transition-colors">🌐 Indeed Listings</a>
                     `;
                     document.getElementById('sidePanel').classList.remove('hidden');
                     
