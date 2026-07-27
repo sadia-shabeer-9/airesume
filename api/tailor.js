@@ -32,43 +32,41 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: "Missing mandatory fields: Name or Job/Project Description." });
     }
 
-    const safeIndustry = targetIndustry ? targetIndustry : "General Technology / Software";
-    const safeSkills = userSkills ? userSkills : "Entry-level / Fresher. Highly motivated to learn and execute with precision.";
+    const safeIndustry = targetIndustry ? targetIndustry : "Software Engineering";
+    const safeSkills = userSkills ? userSkills : "Entry-level professional with strong foundational computer science knowledge, problem-solving skills, and a drive to build scalable software solutions.";
 
     const ai = new Groq({ apiKey: apiKey });
 
-    // Determine requested output format and inject ATS instruction if needed
-    let typeInstruction = "";
     let prefixInstruction = "";
-
     if (docType === "resume" || docType === "cv") {
-        prefixInstruction = "IMPORTANT: You MUST calculate an estimated ATS Match Score (0-100%) based on the keyword alignment between the user's skills and the job description. Your response MUST start EXACTLY with this string on the very first line: `ATS_SCORE: XX%` (replace XX with your calculated number). Do not put any text before this. ";
+        prefixInstruction = "IMPORTANT: Calculate an estimated ATS Match Score (0-100%) based on keyword alignment. Your response MUST start EXACTLY with this string on the very first line: `ATS_SCORE: XX%`. ";
     }
 
+    let typeInstruction = "";
     switch(docType) {
-        case "resume": typeInstruction = "Tailored resume bullet points optimized for ATS systems and recommended keywords."; break;
-        case "cv": typeInstruction = "A comprehensive academic and professional CV structure with distinct sections."; break;
-        case "cover_letter": typeInstruction = "A professional, persuasive, and ready-to-use cover letter."; break;
-        case "interview": typeInstruction = "5 highly likely technical/behavioral interview questions with suggested answers."; break;
-        case "star_case": typeInstruction = "Reformat the skills and experience into strict STAR method (Situation, Task, Action, Result) case studies."; break;
-        case "linkedin": typeInstruction = "An optimized LinkedIn profile headline, an engaging 'About' summary, and bullet points for the experience section."; break;
-        case "cold_email": typeInstruction = "A compelling cold outreach networking email directed at department heads or business owners to secure an interview or meeting."; break;
-        case "freelance_pitch": typeInstruction = "A comprehensive freelance business proposal. Include a professional greeting, proposed scope of work, technical architecture recommendations, and project timeline estimations."; break;
-        default: typeInstruction = "Tailored professional materials.";
+        case "resume": typeInstruction = "Write a complete, professional, highly tailored resume formatted in Markdown. Do not use bracketed placeholders for experience, skills, or projects; instead, write professional, realistic bullet points based on the user's provided background and target job description."; break;
+        case "cv": typeInstruction = "Write a comprehensive, fully articulated academic and professional CV in Markdown, completely written out with professional descriptions tailored to the target role."; break;
+        case "cover_letter": typeInstruction = "Write a complete, persuasive cover letter ready to send."; break;
+        case "interview": typeInstruction = "Generate 5 likely technical interview questions with detailed, professional answers."; break;
+        case "star_case": typeInstruction = "Write 3 complete STAR method case studies based on the user's background."; break;
+        case "linkedin": typeInstruction = "Write an optimized LinkedIn headline, summary, and experience section."; break;
+        case "cold_email": typeInstruction = "Write a complete, compelling cold outreach email."; break;
+        case "freelance_pitch": typeInstruction = "Write a comprehensive freelance business proposal including scope, architecture, and timeline."; break;
+        default: typeInstruction = "Write tailored professional materials.";
     }
 
     const messages = [
       {
         role: "system",
-        content: `You are an elite technical recruiter and business strategist. Format your output strictly using Markdown. Use clear headings, bullet points, and bold text. 
-        
-        CRITICAL RULE: DO NOT invent, guess, or hallucinate contact information (emails, phone numbers, LinkedIn, GitHub). If the user does not provide it, you MUST strictly use placeholders exactly like this: [Enter Email Here], [Enter Phone Number Here], [Enter LinkedIn URL Here].
-        
-        Do not include conversational filler like "Here is your document". Output ONLY the requested document.`
+        content: `You are an elite technical writer and career coach. Your task is to WRITE the actual document for the user, not a blank template. 
+        - Fully write out professional summaries, skill sets, project descriptions, and bullet points tailored to the target job.
+        - NEVER use brackets like '[Enter Job Description Here]' for experience or projects. Synthesize professional content based on the user's input.
+        - ONLY use brackets for private contact info if unprovided (e.g., [Enter Email Here], [Enter Phone Here]).
+        - Format strictly in clean Markdown with clear headings.`
       },
       {
         role: "user",
-        content: `${prefixInstruction}\n\nName: ${userName}\nTarget Industry: ${safeIndustry}\nJob/Project Description:\n${jobDesc}\n\nMy Skills & Experience:\n${safeSkills}\n\nRequired Output: ${typeInstruction}`
+        content: `${prefixInstruction}\n\nApplicant Name: ${userName}\nTarget Industry: ${safeIndustry}\nJob Description / Target Role:\n${jobDesc}\n\nUser Background & Skills:\n${safeSkills}\n\nRequired Output: ${typeInstruction}`
       }
     ];
 
@@ -89,33 +87,18 @@ module.exports = async function handler(req, res) {
         });
         break; 
       } catch (error) {
-        console.warn(`Model [${model}] failed. Fallback initiated.`, error.message);
         lastError = error;
       }
     }
 
     if (!chatCompletion) {
-      return res.status(500).json({ error: "All AI models failed. Last error: " + (lastError?.message || "Unknown error.") });
+      return res.status(500).json({ error: "All AI models failed." });
     }
 
     const resultText = chatCompletion.choices[0]?.message?.content || "No response generated.";
-
-    if (webhookUrl && webhookUrl.startsWith('http')) {
-        try {
-            fetch(webhookUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ applicant: userName, type: docType, content: resultText, timestamp: new Date().toISOString() })
-            }).catch(err => console.error("Webhook trigger failed:", err));
-        } catch (e) {
-            console.error("Webhook processing error:", e);
-        }
-    }
-
     return res.status(200).json({ result: resultText });
 
   } catch (error) {
-    console.error("API Error:", error);
     return res.status(500).json({ error: error.message || "Failed to process request." });
   }
 };
