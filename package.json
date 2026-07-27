@@ -1,0 +1,10 @@
+{
+  "name": "ai-resume-tailorer",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "echo 'No build step required'"
+  },
+  "dependencies": {
+    "groq-sdk": "^0.3.3"
+  }
+}
