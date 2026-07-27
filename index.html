@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Career & Resume Tailorer Pro</title>
+    <!-- Dynamic Emoji Favicon (Replaces the Grey Globe) -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
+    
+    <title>DevForge AI | Career Suite</title>
     
     <!-- CDNs -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <!-- html2pdf for Native PDF Generation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
     <style>
@@ -26,11 +28,17 @@
 
     <div class="max-w-4xl mx-auto px-4 py-12 w-full flex-grow">
         
+        <!-- Upgraded CS/Tech Header -->
         <header class="mb-10 text-center">
-            <h1 class="text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-blue-600 tracking-tight mb-3">
-                AI Career Suite Pro
+            <div class="inline-block mb-3 p-3 bg-indigo-50 rounded-2xl shadow-sm border border-indigo-100">
+                <svg class="w-8 h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500 tracking-tight mb-4">
+                DevForge: AI Career Suite
             </h1>
-            <p class="text-slate-600 text-lg">Advanced analytics and document generation for modern professionals.</p>
+            <p class="text-slate-600 text-lg font-medium">Intelligent document engineering and career analytics for software professionals.</p>
         </header>
 
         <main class="bg-white shadow-2xl shadow-slate-200/50 rounded-2xl p-6 md:p-10 border border-slate-100 relative overflow-hidden">
@@ -131,7 +139,8 @@
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 border-b border-slate-200 pb-4 gap-4">
                     <h2 class="text-2xl font-black text-slate-900">Output Generated</h2>
                     <div class="flex space-x-3">
-                        <button id="pdfBtn" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2 px-4 rounded-lg transition-colors text-sm border border-red-200">
+                        <button id="pdfBtn" class="bg-red-50 hover:bg-red-100 text-red-700 font-bold py-2 px-4 rounded-lg transition-colors text-sm border border-red-200 flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                             Download PDF
                         </button>
                         <button onclick="resetWizard()" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded-lg transition-colors text-sm">
